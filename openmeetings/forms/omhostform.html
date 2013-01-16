@@ -1,0 +1,80 @@
+<script type="text/javascript">
+function loadomform(omid, hostname, rtmp, http, version, admin, pass){
+	omform = document.forms['omhostform'];
+	omform.elements['omid'].value = omid;
+	omform.elements['omhost'].value = hostname;
+	omform.elements['omrtmpport'].value = rtmp;
+	omform.elements['omhttpport'].value = http;
+	omform.elements['omversion'].value = version;
+	omform.elements['omadmin'].value = admin;
+	omform.elements['omadminpass'].value = pass;
+}
+</script>
+<form name="omhostform" action="<?php echo $CFG->wwwroot.'/blocks/openmeetings/config.php' ?>" method="post">
+<input type="hidden" name="omid" value="" />
+<fieldset>
+<table width="80%">
+
+<tr valign="top">
+	<td align="right">
+		<?php print_string('omhost', 'block_openmeetings') ?>
+	</td>
+	<td align="left">
+		<input type="text" size="40" name="omhost" value="" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td align="right">
+		<?php print_string('omrtmpport', 'block_openmeetings') ?>
+	</td>
+	<td align="left">
+		<input type="text" size="5" name="omrtmpport" value="" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td align="right">
+		<?php print_string('omhttpport', 'block_openmeetings') ?>
+	</td>
+	<td align="left">
+		<input type="text" size="5" name="omhttpport" value="" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td align="right">
+		<?php print_string('omversion', 'block_openmeetings') ?>
+	</td>
+	<td align="left">
+		<input type="text" size="5" name="omversion" value="" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td align="right">
+		<?php print_string('omadmin', 'block_openmeetings') ?>
+	</td>
+	<td align="left">
+		<input type="text" size="15" name="omadmin" value="" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td align="right">
+		<?php print_string('omadminpass', 'block_openmeetings') ?>
+	</td>
+	<td align="left">
+		<input type="password" size="15" name="omadminpass" value="" />
+	</td>
+</tr>
+
+<tr valign="top">
+	<td colspan="2" align="center">
+		<input type="submit" name="go_btn" value="<?php echo get_string('update') ?>" />
+	</td>
+</tr>
+
+</table>
+</fieldset>
+</form>

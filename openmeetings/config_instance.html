@@ -1,0 +1,137 @@
+<?php
+include_once $CFG->dirroot.'/blocks/openmeetings/locallib.php';
+?>
+
+<fieldset>
+	<legend><?php print_string('connection', 'block_openmeetings') ?></legend>
+	<center>
+	
+	<?php 
+	$openmeetings_servers = get_available_servers();
+	if(!empty($openmeetings_servers)){ 
+	
+		$enableoptions[0] = get_string('choseserver','block_openmeetings');
+		foreach($openmeetings_servers as $s){	
+			$enableoptions[$s->id] = $s->omhost;
+		}
+//      $this->config->server = isset($this->config->server) ? $this->config->server : 1 ;
+        @choose_from_menu ($enableoptions, 'server', $this->config->server, '', '', '');
+    
+	?>
+	</center>
+	
+	<?php
+	} else {
+		if (has_capability('bloc/openmeetings:manage', get_context_instance(CONTEXT_BLOCK, $this->instance->id))){
+		?>
+			<center><a href="<?php $CFG->wwwroot ?>/blocks/openmeetings/config.php"><?php print_string('configserver','block_openmeetings'); ?></a><br/></center>
+		<?php 
+		} else {
+			print_string('noserverconfiguredcalladmin', 'block_openmeetings');
+		}
+	} 
+	?>
+
+</fieldset>
+<br/>
+<fieldset>
+	<legend><?php print_string('configdefault', 'block_openmeetings') ?></legend><br/>
+	<table align="center" width="90%">
+	<tr valign="top"><td width="20%" align="right">
+	<?php
+	print_string('blocktitle', 'block_openmeetings');?> </td><td align="left"><input type="text" name="title" size="30" value="<?php echo isset($this->config->title)?p($this->config->title):''; ?>" /></td>
+	</tr>
+
+	<tr valign="top"><td width="20%" align="right">
+	<?php
+	print_string('roomname', 'block_openmeetings');?> </td><td align="left"><input type="text" name="roomname" size="30" value="<?php echo isset($this->config->roomname)?p($this->config->roomname):''; ?>" /></td>
+	</tr>
+	
+	<tr valign="top">
+	<td align="right">
+		<?php print_string('roomdesc', 'block_openmeetings');?> 
+	</td>
+	<td>
+		<textarea name="roomdesc" rows="5" COLS="75" ><?php echo isset($this->config->roomdesc)? p($this->config->roomdesc):''; ?></textarea>
+	</td>
+	</tr>
+	
+	<tr valign="top">
+	<td align="right">
+	<?php
+	print_string('roomtype', 'block_openmeetings');
+	echo '</td><td align="left">';
+	$enableoptions = openmeetings_get_roommodes();
+    $this->config->roomtype = isset($this->config->roomtype) ? $this->config->roomtype : 1 ;
+    choose_from_menu ($enableoptions, 'roomtype', $this->config->roomtype, '', '', '');
+	?>
+	</td></tr>
+	
+	
+	<?php // TODO : Le recording quand j'aurais openmeetings !!!!!! // ?>
+	
+	<tr valign="top"><td align="right">
+	<?php
+	print_string('maxusers', 'block_openmeetings');
+	echo '</td><td align="left">';
+	$enableoptions = openmeetings_get_maxusers();
+    $this->config->maxusers = isset($this->config->maxusers) ? $this->config->maxusers : 2 ;
+    choose_from_menu ($enableoptions, 'maxusers', $this->config->maxusers, '', '', '');
+	?>	
+	</td></tr>
+	
+	<tr valign="top"><td align="right">
+	<?php
+	print_string('waitforteacher', 'block_openmeetings');
+	echo '</td><td align="left">';
+	$enableoptions = openmeetings_get_moderations();	
+    $this->config->waitforteacher = isset($this->config->waitforteacher) ? $this->config->waitforteacher : 1 ;
+    choose_from_menu ($enableoptions, 'waitforteacher', $this->config->waitforteacher, '', '', '');
+	?>		
+	</td></tr>
+	
+	<tr valign="top"><td align="right">
+	<?php
+	unset($enableoptions);
+	print_string('language', 'block_openmeetings'); 
+	echo '</td><td align="left">';
+	if (!empty($this->config->server)){
+		$omserver = get_server_info($this->config->server);
+	} else {
+		$omserver->omversion = '1.6'; // take last version as default.
+	}
+	$langchoice = openmeetings_get_languages($omserver->omversion);		    	
+	$this->config->language = isset($this->config->language) ? $this->config->language : 1 ;				
+    choose_from_menu($langchoice, 'language', $this->config->language);	
+	
+	?>
+	</td></tr>
+	<tr valign="top"><td align="right">
+	<?php
+	unset($enableoptions);
+	print_string('defaultduration', 'block_openmeetings');
+	echo '</td><td align="left">';
+	$enableoptions = openmeetings_get_durations();
+    $this->config->duration = isset($this->config->duration) ? $this->config->duration : 1 ;
+    choose_from_menu ($enableoptions, 'duration', $this->config->duration, '', '', '');
+	?>		
+	</td></tr>	
+
+	<tr valign="top"><td align="right">
+	<?php
+	unset($enableoptions);
+	print_string('defaultispublic', 'block_openmeetings');
+	echo '</td><td align="left">';
+	$yesnooptions = array('1' => get_string('yes'), '2' => get_string('no'));
+    $this->config->ispublic = isset($this->config->ispublic) ? $this->config->ispublic : 0 ;
+    choose_from_menu ($yesnooptions, 'ispublic', $this->config->ispublic, '', '', '');
+	?>		
+	</td></tr>	
+	
+	</table>
+	
+<br/>	
+</fieldset>	
+<br/>
+<center><input type="submit" value="<?php print_string('save','block_openmeetings'); ?>" /></center>
+<br/>
